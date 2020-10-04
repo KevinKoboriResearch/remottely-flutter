@@ -49,9 +49,10 @@ class MenuDashboardPage extends StatefulWidget {
 
 class _MenuDashboardPageState extends State<MenuDashboardPage>
     with TickerProviderStateMixin {
+  int body = 0;
   bool isCollapsed = true;
   double screenWidth, screenHeight;
-  final Duration duration = const Duration(milliseconds: 350);
+  final Duration duration = const Duration(milliseconds: 300);
   AnimationController _pageController;
   Animation<double> _scaleAnimation;
   Animation<double> _menuScaleAnimation;
@@ -105,6 +106,32 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
     });
   }
 
+  // getBody(int body) {
+  //   switch (body) {
+  //     case 0:
+  //       return Container(); // Home Screen
+
+  //     case 1:
+  //       return Container(); // Settings Screen
+  //   }
+  // }
+
+  // getActions(int body) {
+  //   switch (body) {
+  //     case 0:
+  //       return [
+  //         Icon(Icons.settings),
+  //         Icon(Icons.home),
+  //       ]; // Home Screen
+
+  //     case 1:
+  //       return [
+  //         Icon(Icons.home),
+  //         Icon(Icons.settings),
+  //       ]; // Settings Screen
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -118,7 +145,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
         backgroundColor: Colors.transparent,
         // automaticallyImplyLeading: false,
         title: Text(
-          isCollapsed ? "CHAVES" : "REMOTTELY",
+          isCollapsed ? body == 0 ? "CHAVES" : "EVENTOS" : "REMOTTELY",
           style: TextStyle(
             fontSize: 18,
             color: Colors.white,
@@ -149,7 +176,35 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
             // },
           ),
         ),
-        actions: [],
+        actions: [
+          IconButton(
+            icon: isCollapsed
+                ? body == 0
+                    ? FaIcon(FontAwesomeIcons.key)
+                    : Icon(Icons.event_note)
+                : Icon(Icons.settings),
+            onPressed: () => {
+              if (!isCollapsed)
+                {
+//logout
+                }
+              else if (body == 1)
+                {
+                  setState(() {
+                    body = 0;
+                  })
+                }
+              else
+                {
+                  setState(() {
+                    body = 1;
+                  })
+                }
+            },
+          )
+        ],
+        // actions: body == 0 ? Icon(Icons.settings) : Icon(Icons.menu),
+        // getActions(body),
       ),
       backgroundColor: backgroundColor,
       body: Stack(
@@ -190,22 +245,40 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
         foregroundColor: Colors.white,
         splashColor: Colors.pink,
         onPressed: () => {
-          // onTap: () {
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (_) => EventsTabsScreen(widget.favoriteMeals),
-          //   ),
-          // ),
-          // },
+//           if (!isCollapsed)
+//             {
+// //logout
+//             }
+//           else if (body == 1)
+//             {
+//               setState(() {
+//                 body = 0;
+//               })
+//             }
+//           else
+//             {
+//               setState(() {
+//                 body = 1;
+//               })
+//             }
         },
+        // onTap: () {
+        // Navigator.of(context).push(
+        //   MaterialPageRoute(
+        //     builder: (_) => EventsTabsScreen(widget.favoriteMeals),
+        //   ),
+        // ),
+        // },
         child: isCollapsed
-            ? Icon(Icons.event_note)
+            ? body == 0 ? Icon(Icons.blur_on) : Icon(Icons.add)
             : Icon(Icons.subdirectory_arrow_left),
         // FaIcon(FontAwesomeIcons.subdirectory_arrow_left),
         shape: _DiamondBorder(),
       ),
       floatingActionButtonLocation: isCollapsed
-          ? FloatingActionButtonLocation.centerFloat
+          ? body == 0
+              ? FloatingActionButtonLocation.centerFloat
+              : FloatingActionButtonLocation.endFloat
           : FloatingActionButtonLocation.startFloat,
     );
   }
@@ -224,11 +297,11 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Spacer(flex: 1),
+                Spacer(flex: 2),
                 Column(children: <Widget>[
                   Container(
-                    height: 120,
-                    width: 120,
+                    height: 100,
+                    width: 100,
                     child: CircleAvatar(
                       backgroundImage: NetworkImage(
                           'https://cdn.pixabay.com/photo/2016/01/19/17/48/woman-1149911_960_720.jpg'),
@@ -250,41 +323,63 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
                 ]),
                 SizedBox(height: 18),
                 Row(children: <Widget>[
-                  Icon(Icons.settings, size: 25, color: Colors.white),
+                  Icon(Icons.settings, size: 25, color: Colors.white60),
                   Text("  Configurações",
-                      style: TextStyle(color: Colors.white, fontSize: 16)),
+                      style: TextStyle(color: Colors.white60, fontSize: 16)),
                 ]),
                 SizedBox(height: 18),
                 Row(children: <Widget>[
-                  Icon(Icons.notifications, size: 25, color: Colors.white),
+                  Icon(Icons.notifications, size: 25, color: Colors.white60),
                   Text("  Notificações",
-                      style: TextStyle(color: Colors.white, fontSize: 16)),
+                      style: TextStyle(color: Colors.white60, fontSize: 16)),
                 ]),
                 SizedBox(height: 18),
                 Row(children: <Widget>[
-                  Icon(Icons.question_answer, size: 25, color: Colors.white),
+                  Icon(Icons.question_answer, size: 25, color: Colors.white60),
                   Text("  Chat",
-                      style: TextStyle(color: Colors.white, fontSize: 16)),
+                      style: TextStyle(color: Colors.white60, fontSize: 16)),
                 ]),
                 SizedBox(height: 18),
                 Row(children: <Widget>[
-                  Icon(Icons.supervisor_account, size: 25, color: Colors.white),
+                  Icon(Icons.supervisor_account,
+                      size: 25, color: Colors.white60),
                   Text("  Usuários",
-                      style: TextStyle(color: Colors.white, fontSize: 16)),
+                      style: TextStyle(color: Colors.white60, fontSize: 16)),
                 ]),
                 SizedBox(height: 18),
                 Row(children: <Widget>[
-                  Icon(Icons.account_circle, size: 25, color: Colors.white),
+                  Icon(Icons.account_circle, size: 25, color: Colors.white60),
                   Text("  Meu perfil",
-                      style: TextStyle(color: Colors.white, fontSize: 16)),
+                      style: TextStyle(color: Colors.white60, fontSize: 16)),
                 ]),
                 SizedBox(height: 18),
                 Row(children: <Widget>[
-                  Icon(Icons.insert_drive_file, size: 25, color: Colors.white),
+                  Icon(Icons.insert_drive_file,
+                      size: 25, color: Colors.white60),
                   Text("  Contratar",
-                      style: TextStyle(color: Colors.white, fontSize: 16)),
+                      style: TextStyle(color: Colors.white60, fontSize: 16)),
                 ]),
                 // SizedBox(height: 18),
+                // Column(
+                //   children: <Widget>[
+                //     RaisedButton(
+                //       onPressed: () {
+                //         setState(() {
+                //           body = 0;
+                //         });
+                //       },
+                //       child: Text("Home"),
+                //     ),
+                //     RaisedButton(
+                //       onPressed: () {
+                //         setState(() {
+                //           body = 1;
+                //         });
+                //       },
+                //       child: Text("Settings"),
+                //     ),
+                //   ],
+                // ),
 
                 // Text("Configurações",
                 //     style: TextStyle(color: Colors.white, fontSize: 16)),
@@ -313,23 +408,24 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
   }
 
   Widget dashboard(context) {
-    return AnimatedPositioned(
-      duration: duration,
-      top: 0,
-      bottom: 0,
-      left: isCollapsed ? 0 : 0.6 * screenWidth,
-      right: isCollapsed ? 0 : -0.6 * screenWidth,
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        child: Material(
-          animationDuration: duration,
-          borderRadius: BorderRadius.all(Radius.circular(40)),
-          elevation: 8,
-          color: backgroundColor,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            physics: ClampingScrollPhysics(),
+    if (body == 0) {
+      return AnimatedPositioned(
+        duration: duration,
+        top: 0,
+        bottom: 0,
+        left: isCollapsed ? 0 : 0.6 * screenWidth,
+        right: isCollapsed ? 0 : -0.6 * screenWidth,
+        child: ScaleTransition(
+          scale: _scaleAnimation,
+          child: Material(
+            animationDuration: duration,
+            borderRadius: BorderRadius.all(Radius.circular(40)),
+            elevation: 8,
+            color: backgroundColor,
             child: Container(
+              height: 300,
+              // screenHeight * 0.2,
+              // MediaQuery.of(context).size.height * 0.2,
               padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -388,139 +484,256 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
                   //   "Chaves",
                   //   style: TextStyle(color: Colors.white, fontSize: 20),
                   // ),
-                  ListView.separated(
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(
-                            "Chave X",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          subtitle: Text(
-                            "Kevin Kobori",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          trailing:
-                              // InkWell(
-                              //   splashColor: Colors.green,
-                              //   onTap: () {},
-                              //   child: Column(
-                              //     mainAxisAlignment: MainAxisAlignment.center,
-                              //     children: <Widget>[
-                              //       FaIcon(
-                              //         FontAwesomeIcons.key,
-                              //         color: Colors.white,
-                              //       ),
-                              //       Text(
-                              //         "Abrir",
-                              //         style: TextStyle(color: Colors.white),
-                              //       ),
-                              //     ],
-                              //   ),
-                              // ),
-                              Container(
-                            width: 60,
-                            height: 40,
-                            child: FlatButton(
-                              onPressed: () => {},
-                              color: Colors.white,
-                              textColor: Colors.black,
-                              disabledTextColor: Colors.blue,
-                              disabledColor: Colors.red,
-                              focusColor: Colors.pink,
-                              hoverColor: Colors.purple,
-                              highlightColor: Colors.white,
-                              splashColor: Colors.yellow,
-                              // padding: EdgeInsets.all(10.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  FaIcon(
-                                    FontAwesomeIcons.key,
-                                    size: 12,
-                                    color: Colors.pink,
-                                  ),
-                                  Text(
-                                    "Abrir",
-                                    style: TextStyle(
-                                      color: Colors.pink,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
+                  SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: ListView.separated(
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(
+                              "Chave X",
+                              style: TextStyle(
+                                color: Colors.white,
                               ),
-
-                              // Column(
-                              //   // Replace with a Row for horizontal icon + text
-                              //   children: <Widget>[Icon(Icons.add), Text("Add")],
-                              // ),
                             ),
-                          ),
-                          // RaisedButton.icon(
-                          //   elevation: 0,
-                          //   color: Colors.transparent,
-                          //   onPressed: () {},
-                          //   icon: FaIcon(FontAwesomeIcons.key,
-                          //       color: Colors.white),
-                          //   label: Text(
-                          //     "Abrir",
-                          //     style: TextStyle(
-                          //       color: Colors.white,
-                          //     ),
-                          //   ),
-                          // ),
-                          // IconButton(
-                          //   icon: FaIcon(FontAwesomeIcons.key,
-                          //       color: Colors.white),
-                          //   onPressed: () {
-                          //     // setState(() {
-                          //     //   if (isCollapsed)
-                          //     //     _pageController.forward();
-                          //     //   else
-                          //     //     _pageController.reverse();
+                            subtitle: Text(
+                              "Kevin Kobori",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            trailing:
+                                // InkWell(
+                                //   splashColor: Colors.green,
+                                //   onTap: () {},
+                                //   child: Column(
+                                //     mainAxisAlignment: MainAxisAlignment.center,
+                                //     children: <Widget>[
+                                //       FaIcon(
+                                //         FontAwesomeIcons.key,
+                                //         color: Colors.white,
+                                //       ),
+                                //       Text(
+                                //         "Abrir",
+                                //         style: TextStyle(color: Colors.white),
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
+                                Container(
+                              width: 60,
+                              height: 40,
+                              child: FlatButton(
+                                onPressed: () => {},
+                                color: Colors.transparent,
+                                textColor: Colors.black,
+                                disabledTextColor: Colors.blue,
+                                disabledColor: Colors.red,
+                                focusColor: Colors.pink,
+                                hoverColor: Colors.purple,
+                                highlightColor: Colors.white,
+                                splashColor: Colors.yellow,
+                                // padding: EdgeInsets.all(10.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    FaIcon(
+                                      FontAwesomeIcons.key,
+                                      size: 12,
+                                      color: Colors.pink,
+                                    ),
+                                    Text(
+                                      "Abrir",
+                                      style: TextStyle(
+                                        color: Colors.pink,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
 
-                          //     //   isCollapsed = !isCollapsed;
-                          //     // });
-                          //   },
-                          //   iconSize: 16.0,
-                          // ),
+                                // Column(
+                                //   // Replace with a Row for horizontal icon + text
+                                //   children: <Widget>[Icon(Icons.add), Text("Add")],
+                                // ),
+                              ),
+                            ),
+                            // RaisedButton.icon(
+                            //   elevation: 0,
+                            //   color: Colors.transparent,
+                            //   onPressed: () {},
+                            //   icon: FaIcon(FontAwesomeIcons.key,
+                            //       color: Colors.white),
+                            //   label: Text(
+                            //     "Abrir",
+                            //     style: TextStyle(
+                            //       color: Colors.white,
+                            //     ),
+                            //   ),
+                            // ),
+                            // IconButton(
+                            //   icon: FaIcon(FontAwesomeIcons.key,
+                            //       color: Colors.white),
+                            //   onPressed: () {
+                            //     // setState(() {
+                            //     //   if (isCollapsed)
+                            //     //     _pageController.forward();
+                            //     //   else
+                            //     //     _pageController.reverse();
 
-                          // InkWell(
-                          //   child: FaIcon(FontAwesomeIcons.key,
-                          //       size: 20, color: Colors.white),
-                          //   onTap: () {
-                          //     setState(() {
-                          //       if (isCollapsed)
-                          //         _pageController.forward();
-                          //       else
-                          //         _pageController.reverse();
+                            //     //   isCollapsed = !isCollapsed;
+                            //     // });
+                            //   },
+                            //   iconSize: 16.0,
+                            // ),
 
-                          //       isCollapsed = !isCollapsed;
-                          //     });
-                          //   },
-                          // ),
-                          // Text(
-                          //   "3",
-                          //   style: TextStyle(
-                          //     color: Colors.white,
-                          //   ),
-                          // ),
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return Divider(height: 16);
-                      },
-                      itemCount: 10)
+                            // InkWell(
+                            //   child: FaIcon(FontAwesomeIcons.key,
+                            //       size: 20, color: Colors.white),
+                            //   onTap: () {
+                            //     setState(() {
+                            //       if (isCollapsed)
+                            //         _pageController.forward();
+                            //       else
+                            //         _pageController.reverse();
+
+                            //       isCollapsed = !isCollapsed;
+                            //     });
+                            //   },
+                            // ),
+                            // Text(
+                            //   "3",
+                            //   style: TextStyle(
+                            //     color: Colors.white,
+                            //   ),
+                            // ),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return Divider(height: 16);
+                        },
+                        itemCount: 16),
+                  )
                 ],
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    } else {
+      return AnimatedPositioned(
+        duration: duration,
+        top: 0,
+        bottom: 0,
+        left: isCollapsed ? 0 : 0.6 * screenWidth,
+        right: isCollapsed ? 0 : -0.6 * screenWidth,
+        child: ScaleTransition(
+          scale: _scaleAnimation,
+          child: Material(
+            animationDuration: duration,
+            borderRadius: BorderRadius.all(Radius.circular(40)),
+            elevation: 8,
+            color: backgroundColor,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              physics: ClampingScrollPhysics(),
+              child: Container(
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    ListView.separated(
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(
+                              "Evento X",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            subtitle: Text(
+                              "Bryan Kobori",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                // FaIcon(
+                                //   FontAwesomeIcons.key,
+                                //   size: 12,
+                                //   color: Colors.pink,
+                                // ),
+                                Text(
+                                  "12/07/2020 - 14:26",
+                                  // "14:26",
+                                  style: TextStyle(
+                                    color: Colors.white60,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+//                                 Column(
+//                                   mainAxisAlignment: MainAxisAlignment.center,
+//                                   children: <Widget>[
+//                                     Text(
+//                                       """
+// 12/07/2020""",
+//                                       TextStyle(color: Colors.white10),
+//                                     ),
+                            // Text("14:27",
+                            //     TextStyle(color: Colors.black26))
+                            // ],
+                            // ),
+                            // Container(
+                            //   width: 60,
+                            //   height: 40,
+                            //   child: FlatButton(
+                            //     onPressed: () => {},
+                            //     color: Colors.white,
+                            //     textColor: Colors.black,
+                            //     disabledTextColor: Colors.blue,
+                            //     disabledColor: Colors.red,
+                            //     focusColor: Colors.pink,
+                            //     hoverColor: Colors.purple,
+                            //     highlightColor: Colors.white,
+                            //     splashColor: Colors.yellow,
+                            //     child: Column(
+                            //       mainAxisAlignment:
+                            //           MainAxisAlignment.center,
+                            //       children: <Widget>[
+                            //         FaIcon(
+                            //           FontAwesomeIcons.key,
+                            //           size: 12,
+                            //           color: Colors.pink,
+                            //         ),
+                            //         Text(
+                            //           "Abrir",
+                            //           style: TextStyle(
+                            //             color: Colors.pink,
+                            //             fontSize: 12,
+                            //           ),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return Divider(height: 16);
+                        },
+                        itemCount: 16)
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
   }
 }
