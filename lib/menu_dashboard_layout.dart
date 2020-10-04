@@ -1,5 +1,9 @@
+// import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import './models/shoe_model.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 bool isCollapsed = false;
 
@@ -8,6 +12,57 @@ Animation animation;
 AnimationController controller;
 
 final Color backgroundColor = Color(0x33003358);
+int body = 0;
+// const List<String, Object> keyList = [
+//   {"id": 1, "name": "kevin kobori"},
+//   {"id": 2, "name": "kevin"},
+//   {"id": 3, "name": "kobori"},
+//   {"id": 4, "name": "kevin kobori"},
+//   {"id": 5, "name": "kevin"},
+//   {"id": 6, "name": "kevin kobori"},
+//   {"id": 7, "name": "kevin kobori"},
+//   {"id": 8, "name": "kobori"},
+//   {"id": 9, "name": "kevin kobori"},
+//   {"id": 10, "name": "kevin kobori"},
+//   {"id": 11, "name": "kevin"},
+//   {"id": 12, "name": "kevin kobori"},
+//   {"id": 13, "name": "kevin kobori"},
+//   {"id": 14, "name": "kevin"},
+//   {"id": 15, "name": "kevin kobori"},
+//   {"id": 16, "name": "kevin"},
+//   {"id": 17, "name": "kevin kobori"},
+//   {"id": 18, "name": "kobori"},
+//   {"id": 19, "name": "kevin kobori"},
+//   {"id": 20, "name": "kevin"},
+// ];
+// static List<Object> list = [
+//     Object(
+//       id: 1,
+//       name: "Festinha dos Amigos",
+//       desc: "...",
+//       price: 200000,
+//       color: AppColors.blueColor,
+//       brand: "Miguel Alcantara",
+//       imgPath: "event.png",
+//     ),
+//     Object(
+//       id: 2,
+//       name: "Reunião Remottely",
+//       desc: "Bora que bora galera!",
+//       price: 7,
+//       color: AppColors.yellowColor,
+//       brand: "Kevin Kobori",
+//       imgPath: "event.png",
+//     ),
+//     Object(
+//       id: 3,
+//       name: "Meu Casamento",
+//       desc: "Valores.",
+//       price: 3,
+//       color: AppColors.redColor,
+//       brand: "Filipe Barcelos",
+//       imgPath: "event.png",
+//     ),]
 
 class _DiamondBorder extends ShapeBorder {
   const _DiamondBorder();
@@ -35,11 +90,259 @@ class _DiamondBorder extends ShapeBorder {
   @override
   void paint(Canvas canvas, Rect rect, {TextDirection textDirection}) {}
 
-  // This border doesn't support scaling.
   @override
   ShapeBorder scale(double t) {
     return null;
   }
+}
+
+class _CustomButtomBorder extends ShapeBorder {
+  const _CustomButtomBorder();
+
+  @override
+  EdgeInsetsGeometry get dimensions {
+    return const EdgeInsets.only();
+  }
+
+  @override
+  Path getInnerPath(Rect rect, {TextDirection textDirection}) {
+    return getOuterPath(rect, textDirection: textDirection);
+  }
+
+  @override
+  Path getOuterPath(Rect rect, {TextDirection textDirection}) {
+    return Path()
+      ..moveTo(rect.left + rect.width / 4.0, rect.top)
+      ..lineTo(rect.right, rect.top + rect.height / 2.0)
+      ..lineTo(rect.left + rect.width / 2.0, rect.bottom)
+      ..lineTo(rect.left, rect.top + rect.height / 2.0)
+      ..close();
+  }
+
+  @override
+  void paint(Canvas canvas, Rect rect, {TextDirection textDirection}) {}
+
+  @override
+  ShapeBorder scale(double t) {
+    return null;
+  }
+}
+
+Widget _buildBottom(BuildContext context) {
+  return CurvedNavigationBar(
+    color: Colors.black,
+    backgroundColor: Colors.transparent,
+    items: <Widget>[
+      FaIcon(FontAwesomeIcons.key, size: 25, color: Colors.white),
+      Icon(Icons.event_note, size: 25, color: Colors.white)
+    ],
+    // onTap: (context) => _selectScreen,
+  );
+}
+
+// Widget _buildBottom(BuildContext context) {
+//   return Container(
+//     // height: MediaQuery.of(context).size.height * 0.15,
+//     padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+//     decoration: BoxDecoration(
+//       color: Colors.transparent,
+//       // shape: _diamondBorder,
+//       borderRadius: BorderRadius.all(
+//         Radius.circular(50),
+//       ),
+//       boxShadow: [
+//         BoxShadow(
+//           color: Colors.black12,
+//           spreadRadius: 1,
+//           blurRadius: 10,
+//         )
+//       ],
+//     ),
+//     child: CurvedNavigationBar(
+//       backgroundColor: Colors.white,
+//       items: <Widget>[
+//         Icon(Icons.add, size: 30),
+//         Icon(Icons.add, size: 30),
+//         Icon(Icons.add, size: 30),
+//         Icon(Icons.add, size: 30),
+//         Icon(Icons.list, size: 30),
+//         Icon(Icons.compare_arrows, size: 30),
+//       ],
+//       onTap: (index) {
+//         //Handle button tap
+//       },
+//     ),
+//     // Row(
+//     //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//     //   children: <Widget>[
+//     //     Column(
+//     //       mainAxisSize: MainAxisSize.min,
+//     //       crossAxisAlignment: CrossAxisAlignment.start,
+//     //       children: <Widget>[
+//     //         Row(
+//     //           children: [
+//     //             RaisedButton(
+//     //               color: backgroundColor,
+//     //               // shape: _CustomButtomBorder(),
+//     //               child: Text(
+//     //                 "Eventos",
+//     //                 style: TextStyle(color: Colors.pink),
+//     //               ),
+//     //               textColor: Colors.white,
+//     //               onPressed: () => {},
+//     //             ),
+//     //             // Text(
+//     //             //   // "${widget.shoeModel.price.toInt()}",
+//     //             //   "48",
+//     //             //   style: TextStyle(
+//     //             //     fontWeight: FontWeight.bold,
+//     //             //     fontSize: 28,
+//     //             //   ),
+//     //             // ),
+//     //             // Padding(
+//     //             //   padding: const EdgeInsets.only(left: 8),
+//     //             //   child: Text(
+//     //             //     "Convidados",
+//     //             //     style: TextStyle(
+//     //             //       color: Colors.black26,
+//     //             //     ),
+//     //             //   ),
+//     //             // ),
+//     //             // Icon(
+//     //             //   Icons.account_circle,
+//     //             //   color: Colors.black26,
+//     //             //   size: 24.0,
+//     //             //   semanticLabel: 'Text to announce in accessibility modes',
+//     //             // ),
+//     //           ],
+//     //         )
+//     //       ],
+//     //     ),
+//     //     RaisedButton(
+//     //       color: backgroundColor,
+//     //       shape: RoundedRectangleBorder(
+//     //           borderRadius: BorderRadius.circular(18.0),
+//     //           side: BorderSide(color: Colors.red)),
+//     //       // shape: _CustomButtomBorder(),
+//     //       child: Text(
+//     //         "Eventos",
+//     //         style: TextStyle(color: Colors.pink),
+//     //       ),
+//     //       textColor: Colors.white,
+//     //       onPressed: () => {},
+//     //     )
+//     //     // RaisedButton.icon(
+//     //     //   color: backgroundColor,
+//     //     //   shape: _CustomButtomBorder(),
+//     //     //   icon: Icon(
+//     //     //     Icons.event_note,
+//     //     //     color: Colors.pink,
+//     //     //   ),
+//     //     //   label: Text(
+//     //     //     "Convidar",
+//     //     //     style: TextStyle(color: Colors.pink),
+//     //     //   ),
+//     //     //   textColor: Colors.white,
+//     //     //   onPressed: () => {},
+//     //     // )
+//     //     // Container(
+//     //     //   padding: const EdgeInsets.symmetric(
+//     //     //     vertical: 8,
+//     //     //     horizontal: 8,
+//     //     //   ),
+//     //     //   decoration: BoxDecoration(
+//     //     //     color: Colors.pink,
+//     //     //     borderRadius: BorderRadius.all(
+//     //     //       Radius.circular(50),
+//     //     //     ),
+//     //     //   ),
+//     //     //   child: Text(
+//     //     //     "Convidar",
+//     //     //     style: TextStyle(
+//     //     //       color: Colors.white,
+//     //     //     ),
+//     //     //   ),
+//     //     // ),
+//     //   ],
+//     // ),
+//   );
+// }
+
+Widget _eventoBuildBottom(BuildContext context) {
+  return Container(
+    // height: MediaQuery.of(context).size.height * 0.15,
+    padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+    // decoration: BoxDecoration(
+    //   color: Colors.transparent,
+    //   borderRadius: BorderRadius.only(
+    //     topLeft: Radius.circular(30),
+    //     topRight: Radius.circular(30),
+    //   ),
+    //   boxShadow: [
+    //     BoxShadow(
+    //       color: Colors.black12,
+    //       spreadRadius: 1,
+    //       blurRadius: 10,
+    //     )
+    //   ],
+    // ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: [
+                Text(
+                  // "${widget.shoeModel.price.toInt()}",
+                  "48",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Text(
+                    "Convidados",
+                    style: TextStyle(
+                      color: Colors.black26,
+                    ),
+                  ),
+                ),
+                // Icon(
+                //   Icons.account_circle,
+                //   color: Colors.black26,
+                //   size: 24.0,
+                //   semanticLabel: 'Text to announce in accessibility modes',
+                // ),
+              ],
+            )
+          ],
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: 8,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.pink,
+            borderRadius: BorderRadius.all(
+              Radius.circular(50),
+            ),
+          ),
+          child: Text(
+            "Convidar",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class MenuDashboardPage extends StatefulWidget {
@@ -49,7 +352,10 @@ class MenuDashboardPage extends StatefulWidget {
 
 class _MenuDashboardPageState extends State<MenuDashboardPage>
     with TickerProviderStateMixin {
-  int body = 0;
+  List<Map<String, Object>> _screens;
+  int _selectedScreenIndex = 0;
+  List<ShoeModel> shoeList = ShoeModel.list;
+  // int body = 0;
   bool isCollapsed = true;
   double screenWidth, screenHeight;
   final Duration duration = const Duration(milliseconds: 300);
@@ -61,6 +367,17 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
   @override
   void initState() {
     super.initState();
+    _screens = [
+      {
+        'title': 'Chaves',
+        // 'screen': FavoriteScreen(widget.favoriteMeals),
+      },
+      {
+        'title': 'Eventos',
+        // 'screen': FavoriteScreen(widget.favoriteMeals),
+        // 'screen': CategoriesScreen(),
+      },
+    ];
     _pageController = AnimationController(vsync: this, duration: duration);
     _scaleAnimation =
         Tween<double>(begin: 1, end: 0.8).animate(_pageController);
@@ -72,13 +389,11 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
         duration: const Duration(milliseconds: 500), vsync: this);
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   controller = AnimationController(
-  //       duration: const Duration(milliseconds: 500), vsync: this);
-  // }
+  _selectScreen(int index) {
+    setState(() {
+      _selectedScreenIndex = index;
+    });
+  }
 
   @override
   void dispose() {
@@ -86,13 +401,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
     controller.dispose();
     super.dispose();
   }
-
-  //   @override
-  // void dispose() {
-  //   controller.dispose();
-
-  //   super.dispose();
-  // }
 
   _onpressed() {
     setState(() {
@@ -105,32 +413,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
       isCollapsed = !isCollapsed;
     });
   }
-
-  // getBody(int body) {
-  //   switch (body) {
-  //     case 0:
-  //       return Container(); // Home Screen
-
-  //     case 1:
-  //       return Container(); // Settings Screen
-  //   }
-  // }
-
-  // getActions(int body) {
-  //   switch (body) {
-  //     case 0:
-  //       return [
-  //         Icon(Icons.settings),
-  //         Icon(Icons.home),
-  //       ]; // Home Screen
-
-  //     case 1:
-  //       return [
-  //         Icon(Icons.home),
-  //         Icon(Icons.settings),
-  //       ]; // Settings Screen
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +427,8 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
         backgroundColor: Colors.transparent,
         // automaticallyImplyLeading: false,
         title: Text(
-          isCollapsed ? body == 0 ? "CHAVES" : "EVENTOS" : "REMOTTELY",
+          // isCollapsed ? body == 0 ? "CHAVES" : "EVENTOS" : "REMOTTELY",
+          _screens[_selectedScreenIndex]['title'],
           style: TextStyle(
             fontSize: 18,
             color: Colors.white,
@@ -179,7 +462,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
         actions: [
           IconButton(
             icon: isCollapsed
-                ? body == 0
+                ? body == 1
                     ? FaIcon(FontAwesomeIcons.key)
                     : Icon(Icons.event_note)
                 : Icon(Icons.settings),
@@ -203,14 +486,13 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
             },
           )
         ],
-        // actions: body == 0 ? Icon(Icons.settings) : Icon(Icons.menu),
-        // getActions(body),
       ),
       backgroundColor: backgroundColor,
       body: Stack(
         children: <Widget>[
           menu(context),
           dashboard(context),
+          // _screens[_selectedScreenIndex]['screen'],
         ],
       ),
       // bottomNavigationBar: BottomAppBar(
@@ -262,13 +544,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
 //               })
 //             }
         },
-        // onTap: () {
-        // Navigator.of(context).push(
-        //   MaterialPageRoute(
-        //     builder: (_) => EventsTabsScreen(widget.favoriteMeals),
-        //   ),
-        // ),
-        // },
         child: isCollapsed
             ? body == 0 ? Icon(Icons.blur_on) : Icon(Icons.add)
             : Icon(Icons.subdirectory_arrow_left),
@@ -314,7 +589,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
                 SizedBox(height: 10),
                 Text("Moradora",
                     style: TextStyle(color: Colors.white, fontSize: 16)),
-                // SizedBox(height: 10),
                 Spacer(flex: 1),
                 Row(children: <Widget>[
                   Icon(Icons.history, size: 25, color: Colors.white),
@@ -359,46 +633,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
                   Text("  Contratar",
                       style: TextStyle(color: Colors.white60, fontSize: 16)),
                 ]),
-                // SizedBox(height: 18),
-                // Column(
-                //   children: <Widget>[
-                //     RaisedButton(
-                //       onPressed: () {
-                //         setState(() {
-                //           body = 0;
-                //         });
-                //       },
-                //       child: Text("Home"),
-                //     ),
-                //     RaisedButton(
-                //       onPressed: () {
-                //         setState(() {
-                //           body = 1;
-                //         });
-                //       },
-                //       child: Text("Settings"),
-                //     ),
-                //   ],
-                // ),
-
-                // Text("Configurações",
-                //     style: TextStyle(color: Colors.white, fontSize: 16)),
-                // SizedBox(height: 22),
-                // Text("Notificações",
-                //     style: TextStyle(color: Colors.white, fontSize: 16)),
-                // SizedBox(height: 22),
-                // Text("Usuários",
-                //     style: TextStyle(color: Colors.white, fontSize: 16)),
-                // SizedBox(height: 22),
-                // Text("Meu perfil",
-                //     style: TextStyle(color: Colors.white, fontSize: 16)),
-                // SizedBox(height: 22),
-                // Text("Contratar",
-                //     style: TextStyle(color: Colors.white, fontSize: 16)),
-                Spacer(flex: 2),
-                // Text("Sair",
-                //     style: TextStyle(color: Colors.white, fontSize: 22)),
-                Spacer(flex: 3),
+                Spacer(flex: 5),
               ],
             ),
           ),
@@ -422,200 +657,96 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
             borderRadius: BorderRadius.all(Radius.circular(40)),
             elevation: 8,
             color: backgroundColor,
-            child: Container(
-              height: 300,
-              // screenHeight * 0.2,
-              // MediaQuery.of(context).size.height * 0.2,
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   mainAxisSize: MainAxisSize.max,
-                  //   children: [
-                  //     // InkWell(
-                  //     //   child: Padding(
-                  //     //     padding: const EdgeInsets.all(8.0),
-                  //     //     child:
-                  //     //         Icon(Icons.menu, size: 30, color: Colors.white),
-                  //     //   ),
-                  //     //   onTap: () {
-                  //     //     setState(() {
-                  //     //       if (isCollapsed)
-                  //     //         _pageController.forward();
-                  //     //       else
-                  //     //         _pageController.reverse();
-
-                  //     //       isCollapsed = !isCollapsed;
-                  //     //     });
-                  //     //   },
-                  //     // ),
-                  //     Center(
-                  //       child: Text(
-                  //         "oi CHAVES",
-                  //         style: TextStyle(
-                  //           fontSize: 18,
-                  //           color: Colors.white,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     // InkWell(
-                  //     //   child: Padding(
-                  //     //     padding: const EdgeInsets.all(8.0),
-                  //     //     child: Icon(Icons.settings,
-                  //     //         size: 30, color: Colors.white),
-                  //     //   ),
-                  //     //   onTap: () {
-                  //     //     setState(() {
-                  //     //       if (isCollapsed)
-                  //     //         _pageController.forward();
-                  //     //       else
-                  //     //         _pageController.reverse();
-
-                  //     //       isCollapsed = !isCollapsed;
-                  //     //     });
-                  //     //   },
-                  //     // ),
-                  //   ],
-                  // ),
-                  // SizedBox(height: 20),
-                  // Text(
-                  //   "Chaves",
-                  //   style: TextStyle(color: Colors.white, fontSize: 20),
-                  // ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: ListView.separated(
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(
-                              "Chave X",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            subtitle: Text(
-                              "Kevin Kobori",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            trailing:
-                                // InkWell(
-                                //   splashColor: Colors.green,
-                                //   onTap: () {},
-                                //   child: Column(
-                                //     mainAxisAlignment: MainAxisAlignment.center,
-                                //     children: <Widget>[
-                                //       FaIcon(
-                                //         FontAwesomeIcons.key,
-                                //         color: Colors.white,
-                                //       ),
-                                //       Text(
-                                //         "Abrir",
-                                //         style: TextStyle(color: Colors.white),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
-                                Container(
-                              width: 60,
-                              height: 40,
-                              child: FlatButton(
-                                onPressed: () => {},
-                                color: Colors.transparent,
-                                textColor: Colors.black,
-                                disabledTextColor: Colors.blue,
-                                disabledColor: Colors.red,
-                                focusColor: Colors.pink,
-                                hoverColor: Colors.purple,
-                                highlightColor: Colors.white,
-                                splashColor: Colors.yellow,
-                                // padding: EdgeInsets.all(10.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    FaIcon(
-                                      FontAwesomeIcons.key,
-                                      size: 12,
-                                      color: Colors.pink,
-                                    ),
-                                    Text(
-                                      "Abrir",
-                                      style: TextStyle(
-                                        color: Colors.pink,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  // height: MediaQuery.of(context).size.height,
+                  // height: MediaQuery.of(context).size.height * 0.78,
+                  padding:
+                      const EdgeInsets.only(left: 16, right: 16, bottom: 40),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: shoeList.length,
+                    itemBuilder: (context, index) {
+                      final kl = shoeList[index];
+                      return ListTile(
+                        title: Text(
+                          "${kl.name.toString()}",
+                          // "Chave X",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                        subtitle: Text(
+                          "${kl.brand.toString()}",
+                          // brand
+                          // "Kevin Kobori",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                        trailing: Container(
+                          width: 60,
+                          height: 40,
+                          child: FlatButton(
+                            onPressed: () => {},
+                            color: Colors.transparent,
+                            textColor: Colors.black,
+                            disabledTextColor: Colors.blue,
+                            disabledColor: Colors.red,
+                            focusColor: Colors.pink,
+                            hoverColor: Colors.purple,
+                            highlightColor: Colors.white,
+                            splashColor: Colors.yellow,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                FaIcon(
+                                  FontAwesomeIcons.key,
+                                  size: 12,
+                                  color: Colors.pink,
                                 ),
-
-                                // Column(
-                                //   // Replace with a Row for horizontal icon + text
-                                //   children: <Widget>[Icon(Icons.add), Text("Add")],
-                                // ),
-                              ),
+                                Text(
+                                  "Abrir",
+                                  style: TextStyle(
+                                    color: Colors.pink,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
                             ),
-                            // RaisedButton.icon(
-                            //   elevation: 0,
-                            //   color: Colors.transparent,
-                            //   onPressed: () {},
-                            //   icon: FaIcon(FontAwesomeIcons.key,
-                            //       color: Colors.white),
-                            //   label: Text(
-                            //     "Abrir",
-                            //     style: TextStyle(
-                            //       color: Colors.white,
-                            //     ),
-                            //   ),
-                            // ),
-                            // IconButton(
-                            //   icon: FaIcon(FontAwesomeIcons.key,
-                            //       color: Colors.white),
-                            //   onPressed: () {
-                            //     // setState(() {
-                            //     //   if (isCollapsed)
-                            //     //     _pageController.forward();
-                            //     //   else
-                            //     //     _pageController.reverse();
-
-                            //     //   isCollapsed = !isCollapsed;
-                            //     // });
-                            //   },
-                            //   iconSize: 16.0,
-                            // ),
-
-                            // InkWell(
-                            //   child: FaIcon(FontAwesomeIcons.key,
-                            //       size: 20, color: Colors.white),
-                            //   onTap: () {
-                            //     setState(() {
-                            //       if (isCollapsed)
-                            //         _pageController.forward();
-                            //       else
-                            //         _pageController.reverse();
-
-                            //       isCollapsed = !isCollapsed;
-                            //     });
-                            //   },
-                            // ),
-                            // Text(
-                            //   "3",
-                            //   style: TextStyle(
-                            //     color: Colors.white,
-                            //   ),
-                            // ),
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return Divider(height: 16);
-                        },
-                        itemCount: 16),
-                  )
-                ],
-              ),
+                          ),
+                        ),
+                      );
+                    },
+                    // separatorBuilder: (context, index) {
+                    //   return Divider(
+                    //     height: 12,
+                    //     thickness: 3,
+                    //     indent: 16,
+                    //     endIndent: 16,
+                    //     color: Color(0x33003328),
+                    //   );
+                    // },
+                  ),
+                ),
+                Positioned(
+                  left: 0.0,
+                  right: 0.0,
+                  bottom: 0.0,
+                  child: CurvedNavigationBar(
+                    color: Colors.black,
+                    backgroundColor: Colors.transparent,
+                    items: <Widget>[
+                      FaIcon(FontAwesomeIcons.key,
+                          size: 25, color: Colors.white),
+                      Icon(Icons.event_note, size: 25, color: Colors.white)
+                    ],
+                    onTap: _selectScreen,
+                  ),
+                  // _buildBottom(context),
+                ),
+              ],
             ),
           ),
         ),
@@ -638,7 +769,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
               scrollDirection: Axis.vertical,
               physics: ClampingScrollPhysics(),
               child: Container(
-                padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
+                padding: const EdgeInsets.only(left: 16, right: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -676,51 +807,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
                                 ),
                               ],
                             ),
-//                                 Column(
-//                                   mainAxisAlignment: MainAxisAlignment.center,
-//                                   children: <Widget>[
-//                                     Text(
-//                                       """
-// 12/07/2020""",
-//                                       TextStyle(color: Colors.white10),
-//                                     ),
-                            // Text("14:27",
-                            //     TextStyle(color: Colors.black26))
-                            // ],
-                            // ),
-                            // Container(
-                            //   width: 60,
-                            //   height: 40,
-                            //   child: FlatButton(
-                            //     onPressed: () => {},
-                            //     color: Colors.white,
-                            //     textColor: Colors.black,
-                            //     disabledTextColor: Colors.blue,
-                            //     disabledColor: Colors.red,
-                            //     focusColor: Colors.pink,
-                            //     hoverColor: Colors.purple,
-                            //     highlightColor: Colors.white,
-                            //     splashColor: Colors.yellow,
-                            //     child: Column(
-                            //       mainAxisAlignment:
-                            //           MainAxisAlignment.center,
-                            //       children: <Widget>[
-                            //         FaIcon(
-                            //           FontAwesomeIcons.key,
-                            //           size: 12,
-                            //           color: Colors.pink,
-                            //         ),
-                            //         Text(
-                            //           "Abrir",
-                            //           style: TextStyle(
-                            //             color: Colors.pink,
-                            //             fontSize: 12,
-                            //           ),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   ),
-                            // ),
                           );
                         },
                         separatorBuilder: (context, index) {
