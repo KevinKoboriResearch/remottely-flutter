@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+bool isCollapsed = false;
+
+Animation animation;
+
+AnimationController controller;
 
 final Color backgroundColor = Color(0x33003358);
 
@@ -41,11 +48,11 @@ class MenuDashboardPage extends StatefulWidget {
 }
 
 class _MenuDashboardPageState extends State<MenuDashboardPage>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   bool isCollapsed = true;
   double screenWidth, screenHeight;
-  final Duration duration = const Duration(milliseconds: 300);
-  AnimationController _controller;
+  final Duration duration = const Duration(milliseconds: 350);
+  AnimationController _pageController;
   Animation<double> _scaleAnimation;
   Animation<double> _menuScaleAnimation;
   Animation<Offset> _slideAnimation;
@@ -53,18 +60,49 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: duration);
-    _scaleAnimation = Tween<double>(begin: 1, end: 0.8).animate(_controller);
+    _pageController = AnimationController(vsync: this, duration: duration);
+    _scaleAnimation =
+        Tween<double>(begin: 1, end: 0.8).animate(_pageController);
     _menuScaleAnimation =
-        Tween<double>(begin: 0.5, end: 1).animate(_controller);
+        Tween<double>(begin: 0.5, end: 1).animate(_pageController);
     _slideAnimation = Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0))
-        .animate(_controller);
+        .animate(_pageController);
+    controller = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
   }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   controller = AnimationController(
+  //       duration: const Duration(milliseconds: 500), vsync: this);
+  // }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _pageController.dispose();
+    controller.dispose();
     super.dispose();
+  }
+
+  //   @override
+  // void dispose() {
+  //   controller.dispose();
+
+  //   super.dispose();
+  // }
+
+  _onpressed() {
+    setState(() {
+      isCollapsed ? controller.forward() : controller.reverse();
+      if (isCollapsed)
+        _pageController.forward();
+      else
+        _pageController.reverse();
+
+      isCollapsed = !isCollapsed;
+    });
   }
 
   @override
@@ -80,7 +118,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
         backgroundColor: Colors.transparent,
         // automaticallyImplyLeading: false,
         title: Text(
-          "REMOTTELY",
+          isCollapsed ? "CHAVES" : "REMOTTELY",
           style: TextStyle(
             fontSize: 18,
             color: Colors.white,
@@ -89,20 +127,26 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
         leading: Builder(
           builder: (context) => IconButton(
             color: Colors.black,
-            icon: Icon(
-              Icons.menu,
+            icon: AnimatedIcon(
+              icon: AnimatedIcons.menu_arrow,
               color: Colors.white,
+              progress: controller,
             ),
-            onPressed: () => {
-              setState(() {
-                if (isCollapsed)
-                  _controller.forward();
-                else
-                  _controller.reverse();
+            onPressed: () => _onpressed(),
+            // Icon(
+            //   Icons.menu,
+            //   color: Colors.white,
+            // ),
+            // onPressed: () => {
+            //   setState(() {
+            //     if (isCollapsed)
+            //       _pageController.forward();
+            //     else
+            //       _pageController.reverse();
 
-                isCollapsed = !isCollapsed;
-              }),
-            },
+            //     isCollapsed = !isCollapsed;
+            //   }),
+            // },
           ),
         ),
         actions: [],
@@ -154,10 +198,15 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
           // ),
           // },
         },
-        child: Icon(Icons.event_note),
+        child: isCollapsed
+            ? Icon(Icons.event_note)
+            : Icon(Icons.subdirectory_arrow_left),
+        // FaIcon(FontAwesomeIcons.subdirectory_arrow_left),
         shape: _DiamondBorder(),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: isCollapsed
+          ? FloatingActionButtonLocation.centerFloat
+          : FloatingActionButtonLocation.startFloat,
     );
   }
 
@@ -167,7 +216,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
       child: ScaleTransition(
         scale: _menuScaleAnimation,
         child: Padding(
-          padding: const EdgeInsets.only(left: 16.0),
+          padding: const EdgeInsets.only(left: 64.0),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Column(
@@ -175,20 +224,86 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text("Dashboard",
-                    style: TextStyle(color: Colors.white, fontSize: 22)),
+                Spacer(flex: 1),
+                Column(children: <Widget>[
+                  Container(
+                    height: 120,
+                    width: 120,
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                          'https://cdn.pixabay.com/photo/2016/01/19/17/48/woman-1149911_960_720.jpg'),
+                    ),
+                  ),
+                ]),
                 SizedBox(height: 20),
-                Text("Messages",
-                    style: TextStyle(color: Colors.white, fontSize: 22)),
-                SizedBox(height: 20),
-                Text("Utility Bills",
-                    style: TextStyle(color: Colors.white, fontSize: 22)),
-                SizedBox(height: 20),
-                Text("Funds Transfer",
-                    style: TextStyle(color: Colors.white, fontSize: 22)),
-                SizedBox(height: 20),
-                Text("Branches",
-                    style: TextStyle(color: Colors.white, fontSize: 22)),
+                Text("Emanuele Gomes",
+                    style: TextStyle(color: Colors.white, fontSize: 20)),
+                SizedBox(height: 10),
+                Text("Moradora",
+                    style: TextStyle(color: Colors.white, fontSize: 16)),
+                // SizedBox(height: 10),
+                Spacer(flex: 1),
+                Row(children: <Widget>[
+                  Icon(Icons.history, size: 25, color: Colors.white),
+                  Text("  Histórico",
+                      style: TextStyle(color: Colors.white, fontSize: 16)),
+                ]),
+                SizedBox(height: 18),
+                Row(children: <Widget>[
+                  Icon(Icons.settings, size: 25, color: Colors.white),
+                  Text("  Configurações",
+                      style: TextStyle(color: Colors.white, fontSize: 16)),
+                ]),
+                SizedBox(height: 18),
+                Row(children: <Widget>[
+                  Icon(Icons.notifications, size: 25, color: Colors.white),
+                  Text("  Notificações",
+                      style: TextStyle(color: Colors.white, fontSize: 16)),
+                ]),
+                SizedBox(height: 18),
+                Row(children: <Widget>[
+                  Icon(Icons.question_answer, size: 25, color: Colors.white),
+                  Text("  Chat",
+                      style: TextStyle(color: Colors.white, fontSize: 16)),
+                ]),
+                SizedBox(height: 18),
+                Row(children: <Widget>[
+                  Icon(Icons.supervisor_account, size: 25, color: Colors.white),
+                  Text("  Usuários",
+                      style: TextStyle(color: Colors.white, fontSize: 16)),
+                ]),
+                SizedBox(height: 18),
+                Row(children: <Widget>[
+                  Icon(Icons.account_circle, size: 25, color: Colors.white),
+                  Text("  Meu perfil",
+                      style: TextStyle(color: Colors.white, fontSize: 16)),
+                ]),
+                SizedBox(height: 18),
+                Row(children: <Widget>[
+                  Icon(Icons.insert_drive_file, size: 25, color: Colors.white),
+                  Text("  Contratar",
+                      style: TextStyle(color: Colors.white, fontSize: 16)),
+                ]),
+                // SizedBox(height: 18),
+
+                // Text("Configurações",
+                //     style: TextStyle(color: Colors.white, fontSize: 16)),
+                // SizedBox(height: 22),
+                // Text("Notificações",
+                //     style: TextStyle(color: Colors.white, fontSize: 16)),
+                // SizedBox(height: 22),
+                // Text("Usuários",
+                //     style: TextStyle(color: Colors.white, fontSize: 16)),
+                // SizedBox(height: 22),
+                // Text("Meu perfil",
+                //     style: TextStyle(color: Colors.white, fontSize: 16)),
+                // SizedBox(height: 22),
+                // Text("Contratar",
+                //     style: TextStyle(color: Colors.white, fontSize: 16)),
+                Spacer(flex: 2),
+                // Text("Sair",
+                //     style: TextStyle(color: Colors.white, fontSize: 22)),
+                Spacer(flex: 3),
               ],
             ),
           ),
@@ -203,7 +318,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
       top: 0,
       bottom: 0,
       left: isCollapsed ? 0 : 0.6 * screenWidth,
-      right: isCollapsed ? 0 : -0.4 * screenWidth,
+      right: isCollapsed ? 0 : -0.6 * screenWidth,
       child: ScaleTransition(
         scale: _scaleAnimation,
         child: Material(
@@ -219,54 +334,56 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      // InkWell(
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.all(8.0),
-                      //     child:
-                      //         Icon(Icons.menu, size: 30, color: Colors.white),
-                      //   ),
-                      //   onTap: () {
-                      //     setState(() {
-                      //       if (isCollapsed)
-                      //         _controller.forward();
-                      //       else
-                      //         _controller.reverse();
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   mainAxisSize: MainAxisSize.max,
+                  //   children: [
+                  //     // InkWell(
+                  //     //   child: Padding(
+                  //     //     padding: const EdgeInsets.all(8.0),
+                  //     //     child:
+                  //     //         Icon(Icons.menu, size: 30, color: Colors.white),
+                  //     //   ),
+                  //     //   onTap: () {
+                  //     //     setState(() {
+                  //     //       if (isCollapsed)
+                  //     //         _pageController.forward();
+                  //     //       else
+                  //     //         _pageController.reverse();
 
-                      //       isCollapsed = !isCollapsed;
-                      //     });
-                      //   },
-                      // ),
-                      Text(
-                        "CHAVES",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                      // InkWell(
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.all(8.0),
-                      //     child: Icon(Icons.settings,
-                      //         size: 30, color: Colors.white),
-                      //   ),
-                      //   onTap: () {
-                      //     setState(() {
-                      //       if (isCollapsed)
-                      //         _controller.forward();
-                      //       else
-                      //         _controller.reverse();
+                  //     //       isCollapsed = !isCollapsed;
+                  //     //     });
+                  //     //   },
+                  //     // ),
+                  //     Center(
+                  //       child: Text(
+                  //         "oi CHAVES",
+                  //         style: TextStyle(
+                  //           fontSize: 18,
+                  //           color: Colors.white,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     // InkWell(
+                  //     //   child: Padding(
+                  //     //     padding: const EdgeInsets.all(8.0),
+                  //     //     child: Icon(Icons.settings,
+                  //     //         size: 30, color: Colors.white),
+                  //     //   ),
+                  //     //   onTap: () {
+                  //     //     setState(() {
+                  //     //       if (isCollapsed)
+                  //     //         _pageController.forward();
+                  //     //       else
+                  //     //         _pageController.reverse();
 
-                      //       isCollapsed = !isCollapsed;
-                      //     });
-                      //   },
-                      // ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
+                  //     //       isCollapsed = !isCollapsed;
+                  //     //     });
+                  //     //   },
+                  //     // ),
+                  //   ],
+                  // ),
+                  // SizedBox(height: 20),
                   // Text(
                   //   "Chaves",
                   //   style: TextStyle(color: Colors.white, fontSize: 20),
@@ -287,12 +404,111 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
                               color: Colors.white,
                             ),
                           ),
-                          trailing: Text(
-                            "3",
-                            style: TextStyle(
+                          trailing:
+                              // InkWell(
+                              //   splashColor: Colors.green,
+                              //   onTap: () {},
+                              //   child: Column(
+                              //     mainAxisAlignment: MainAxisAlignment.center,
+                              //     children: <Widget>[
+                              //       FaIcon(
+                              //         FontAwesomeIcons.key,
+                              //         color: Colors.white,
+                              //       ),
+                              //       Text(
+                              //         "Abrir",
+                              //         style: TextStyle(color: Colors.white),
+                              //       ),
+                              //     ],
+                              //   ),
+                              // ),
+                              Container(
+                            width: 60,
+                            height: 40,
+                            child: FlatButton(
+                              onPressed: () => {},
                               color: Colors.white,
+                              textColor: Colors.black,
+                              disabledTextColor: Colors.blue,
+                              disabledColor: Colors.red,
+                              focusColor: Colors.pink,
+                              hoverColor: Colors.purple,
+                              highlightColor: Colors.white,
+                              splashColor: Colors.yellow,
+                              // padding: EdgeInsets.all(10.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  FaIcon(
+                                    FontAwesomeIcons.key,
+                                    size: 12,
+                                    color: Colors.pink,
+                                  ),
+                                  Text(
+                                    "Abrir",
+                                    style: TextStyle(
+                                      color: Colors.pink,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              // Column(
+                              //   // Replace with a Row for horizontal icon + text
+                              //   children: <Widget>[Icon(Icons.add), Text("Add")],
+                              // ),
                             ),
                           ),
+                          // RaisedButton.icon(
+                          //   elevation: 0,
+                          //   color: Colors.transparent,
+                          //   onPressed: () {},
+                          //   icon: FaIcon(FontAwesomeIcons.key,
+                          //       color: Colors.white),
+                          //   label: Text(
+                          //     "Abrir",
+                          //     style: TextStyle(
+                          //       color: Colors.white,
+                          //     ),
+                          //   ),
+                          // ),
+                          // IconButton(
+                          //   icon: FaIcon(FontAwesomeIcons.key,
+                          //       color: Colors.white),
+                          //   onPressed: () {
+                          //     // setState(() {
+                          //     //   if (isCollapsed)
+                          //     //     _pageController.forward();
+                          //     //   else
+                          //     //     _pageController.reverse();
+
+                          //     //   isCollapsed = !isCollapsed;
+                          //     // });
+                          //   },
+                          //   iconSize: 16.0,
+                          // ),
+
+                          // InkWell(
+                          //   child: FaIcon(FontAwesomeIcons.key,
+                          //       size: 20, color: Colors.white),
+                          //   onTap: () {
+                          //     setState(() {
+                          //       if (isCollapsed)
+                          //         _pageController.forward();
+                          //       else
+                          //         _pageController.reverse();
+
+                          //       isCollapsed = !isCollapsed;
+                          //     });
+                          //   },
+                          // ),
+                          // Text(
+                          //   "3",
+                          //   style: TextStyle(
+                          //     color: Colors.white,
+                          //   ),
+                          // ),
                         );
                       },
                       separatorBuilder: (context, index) {
