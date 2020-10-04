@@ -2,6 +2,39 @@ import 'package:flutter/material.dart';
 
 final Color backgroundColor = Color(0x33003358);
 
+class _DiamondBorder extends ShapeBorder {
+  const _DiamondBorder();
+
+  @override
+  EdgeInsetsGeometry get dimensions {
+    return const EdgeInsets.only();
+  }
+
+  @override
+  Path getInnerPath(Rect rect, {TextDirection textDirection}) {
+    return getOuterPath(rect, textDirection: textDirection);
+  }
+
+  @override
+  Path getOuterPath(Rect rect, {TextDirection textDirection}) {
+    return Path()
+      ..moveTo(rect.left + rect.width / 4.0, rect.top)
+      ..lineTo(rect.right, rect.top + rect.height / 2.0)
+      ..lineTo(rect.left + rect.width / 2.0, rect.bottom)
+      ..lineTo(rect.left, rect.top + rect.height / 2.0)
+      ..close();
+  }
+
+  @override
+  void paint(Canvas canvas, Rect rect, {TextDirection textDirection}) {}
+
+  // This border doesn't support scaling.
+  @override
+  ShapeBorder scale(double t) {
+    return null;
+  }
+}
+
 class MenuDashboardPage extends StatefulWidget {
   @override
   _MenuDashboardPageState createState() => _MenuDashboardPageState();
@@ -41,6 +74,39 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
     screenWidth = size.width;
 
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        brightness: Brightness.dark,
+        backgroundColor: Colors.transparent,
+        // automaticallyImplyLeading: false,
+        title: Text(
+          "REMOTTELY",
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.white,
+          ),
+        ),
+        leading: Builder(
+          builder: (context) => IconButton(
+            color: Colors.black,
+            icon: Icon(
+              Icons.menu,
+              color: Colors.white,
+            ),
+            onPressed: () => {
+              setState(() {
+                if (isCollapsed)
+                  _controller.forward();
+                else
+                  _controller.reverse();
+
+                isCollapsed = !isCollapsed;
+              }),
+            },
+          ),
+        ),
+        actions: [],
+      ),
       backgroundColor: backgroundColor,
       body: Stack(
         children: <Widget>[
@@ -48,6 +114,50 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
           dashboard(context),
         ],
       ),
+      // bottomNavigationBar: BottomAppBar(
+      //   elevation: 0,
+      //   // color: Theme.of(context).primaryColor,
+      //   color: Colors.transparent,
+      //   shape: const CircularNotchedRectangle(),
+      //   child: BottomNavigationBar(
+      //     // onTap: _selectScreen,
+      //     selectedItemColor: Theme.of(context).accentColor,
+      //     // currentIndex: _selectedScreenIndex,
+      //     unselectedItemColor: Colors.black26,
+      //     type: BottomNavigationBarType.fixed,
+      //     showSelectedLabels: false,
+      //     showUnselectedLabels: false,
+      //     backgroundColor: Colors.transparent,
+      //     elevation: 0,
+      //     items: [
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.star),
+      //         title: Text('Chaves'),
+      //       ),
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.vpn_key),
+      //         title: Text("Eventos"),
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.pink,
+        foregroundColor: Colors.white,
+        splashColor: Colors.pink,
+        onPressed: () => {
+          // onTap: () {
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (_) => EventsTabsScreen(widget.favoriteMeals),
+          //   ),
+          // ),
+          // },
+        },
+        child: Icon(Icons.event_note),
+        shape: _DiamondBorder(),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
@@ -67,16 +177,16 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
               children: <Widget>[
                 Text("Dashboard",
                     style: TextStyle(color: Colors.white, fontSize: 22)),
-                SizedBox(height: 10),
+                SizedBox(height: 20),
                 Text("Messages",
                     style: TextStyle(color: Colors.white, fontSize: 22)),
-                SizedBox(height: 10),
+                SizedBox(height: 20),
                 Text("Utility Bills",
                     style: TextStyle(color: Colors.white, fontSize: 22)),
-                SizedBox(height: 10),
+                SizedBox(height: 20),
                 Text("Funds Transfer",
                     style: TextStyle(color: Colors.white, fontSize: 22)),
-                SizedBox(height: 10),
+                SizedBox(height: 20),
                 Text("Branches",
                     style: TextStyle(color: Colors.white, fontSize: 22)),
               ],
@@ -105,7 +215,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
             scrollDirection: Axis.vertical,
             physics: ClampingScrollPhysics(),
             child: Container(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 48),
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -113,62 +223,76 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      InkWell(
-                        child: Icon(Icons.menu, color: Colors.white),
-                        onTap: () {
-                          setState(() {
-                            if (isCollapsed)
-                              _controller.forward();
-                            else
-                              _controller.reverse();
+                      // InkWell(
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.all(8.0),
+                      //     child:
+                      //         Icon(Icons.menu, size: 30, color: Colors.white),
+                      //   ),
+                      //   onTap: () {
+                      //     setState(() {
+                      //       if (isCollapsed)
+                      //         _controller.forward();
+                      //       else
+                      //         _controller.reverse();
 
-                            isCollapsed = !isCollapsed;
-                          });
-                        },
+                      //       isCollapsed = !isCollapsed;
+                      //     });
+                      //   },
+                      // ),
+                      Text(
+                        "CHAVES",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
                       ),
-                      Text("My Cards",
-                          style: TextStyle(fontSize: 24, color: Colors.white)),
-                      Icon(Icons.settings, color: Colors.white),
+                      // InkWell(
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.all(8.0),
+                      //     child: Icon(Icons.settings,
+                      //         size: 30, color: Colors.white),
+                      //   ),
+                      //   onTap: () {
+                      //     setState(() {
+                      //       if (isCollapsed)
+                      //         _controller.forward();
+                      //       else
+                      //         _controller.reverse();
+
+                      //       isCollapsed = !isCollapsed;
+                      //     });
+                      //   },
+                      // ),
                     ],
                   ),
-                  SizedBox(height: 50),
-                  Container(
-                    height: 200,
-                    child: PageView(
-                      controller: PageController(viewportFraction: 0.8),
-                      scrollDirection: Axis.horizontal,
-                      pageSnapping: true,
-                      children: <Widget>[
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                          color: Colors.redAccent,
-                          width: 100,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                          color: Colors.blueAccent,
-                          width: 100,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                          color: Colors.greenAccent,
-                          width: 100,
-                        ),
-                      ],
-                    ),
-                  ),
                   SizedBox(height: 20),
-                  Text(
-                    "Transactions",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
+                  // Text(
+                  //   "Chaves",
+                  //   style: TextStyle(color: Colors.white, fontSize: 20),
+                  // ),
                   ListView.separated(
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          title: Text("Macbook"),
-                          subtitle: Text("Apple"),
-                          trailing: Text("-2900"),
+                          title: Text(
+                            "Chave X",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          subtitle: Text(
+                            "Kevin Kobori",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          trailing: Text(
+                            "3",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
                         );
                       },
                       separatorBuilder: (context, index) {
